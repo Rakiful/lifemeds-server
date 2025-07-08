@@ -3,14 +3,24 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const { connectToDB } = require("./utils/db");
+const { initializeFirebase } = require("./utils/firebase");
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://rakif.netlify.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
+initializeFirebase();
+
 connectToDB().then((db) => {
+  app.use("/", userRoutes(db));
   app.get("/", (req, res) => {
     res.send("LifeMeds Server Running");
   });
