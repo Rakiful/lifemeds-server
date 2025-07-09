@@ -12,6 +12,21 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getUserRole = async (req, res) => {
+  try {
+    const email = req.params.email;
+    if (req.decoded.email !== email) {
+      return res.status(403).send({ message: "Forbidden" });
+    }
+    const user = await req.db.userCollections.findOne({ email });
+    res.send({ role: user?.role || "user" });
+  } catch {
+    res
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
+  }
+};
+
 const addOrUpdateUser = async (req, res) => {
   try {
     const { name, email, uid, photo, createdAt, role, lastLogin } = req.body;
@@ -42,4 +57,5 @@ const addOrUpdateUser = async (req, res) => {
 module.exports = {
   getUsers,
   addOrUpdateUser,
+  getUserRole,
 };

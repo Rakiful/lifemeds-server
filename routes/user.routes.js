@@ -7,7 +7,11 @@ const {
   verifyAdmin,
 } = require("../middlewares/auth.middlewares");
 
-const { getUsers,addOrUpdateUser } = require("../controllers/user.controller");
+const {
+  getUsers,
+  addOrUpdateUser,
+  getUserRole,
+} = require("../controllers/user.controller");
 
 module.exports = (db) => {
   const router = express.Router();
@@ -20,6 +24,7 @@ module.exports = (db) => {
 
   router.get("/users", getUsers);
   router.post("/users", addOrUpdateUser);
+  router.get("/users/:email/role",verifyFirebaseToken, getUserRole);
 
   return router;
 };

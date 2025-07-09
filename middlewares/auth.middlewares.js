@@ -24,15 +24,12 @@ const verifyTokenEmail = (req, res, next) => {
 };
 
 const verifyAdmin = async (req, res, next) => {
-  const db = req.db;
-  const userCollections = db.userCollections;
   const email = req.decoded?.email;
 
-  const user = await userCollections.findOne({ email });
+  const user = await req.db.userCollections.findOne({ email });
   if (!user || user.role !== "admin") {
     return res.status(403).send({ message: "admin access only" });
   }
-
   next();
 };
 
