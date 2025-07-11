@@ -11,6 +11,7 @@ const {
   getUsers,
   addOrUpdateUser,
   getUserRole,
+  updateUserRole
 } = require("../controllers/user.controller");
 
 module.exports = (db) => {
@@ -22,9 +23,10 @@ module.exports = (db) => {
     next();
   });
 
-  router.get("/users", getUsers);
+  router.get("/users",  getUsers);
   router.post("/users", addOrUpdateUser);
-  router.get("/users/:email/role",verifyFirebaseToken, getUserRole);
+  router.get("/users/:email/role", verifyFirebaseToken, getUserRole);
+  router.patch("/users/role/:id", verifyFirebaseToken,verifyAdmin, updateUserRole);
 
   return router;
 };

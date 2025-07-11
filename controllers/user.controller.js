@@ -54,8 +54,25 @@ const addOrUpdateUser = async (req, res) => {
   }
 };
 
+const updateUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+    const result = await req.db.userCollections.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { role } }
+    );
+    res.send(result);
+  } catch {
+    res
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
+  }
+};
+
 module.exports = {
   getUsers,
   addOrUpdateUser,
   getUserRole,
+  updateUserRole,
 };
