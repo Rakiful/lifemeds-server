@@ -3,8 +3,8 @@ const { ObjectId } = require("mongodb");
 
 const getMedicines = async (req, res) => {
   try {
-    const users = await req.db.medicineCollections.find().toArray();
-    res.send(users);
+    const medicines = await req.db.medicineCollections.find().toArray();
+    res.send(medicines);
   } catch (error) {
     res
       .status(500)

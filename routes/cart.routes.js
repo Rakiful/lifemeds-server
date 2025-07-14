@@ -1,4 +1,4 @@
-// routes/medicine.routes.js
+// routes/cart.routes.js
 const express = require("express");
 
 const {
