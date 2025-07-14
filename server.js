@@ -5,6 +5,8 @@ require("dotenv").config();
 const { connectToDB } = require("./utils/db");
 const { initializeFirebase } = require("./utils/firebase");
 const userRoutes = require("./routes/user.routes");
+const medicineRoutes = require("./routes/medicine.routes");
+const cartRoutes = require("./routes/cart.routes");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +23,8 @@ initializeFirebase();
 
 connectToDB().then((db) => {
   app.use("/", userRoutes(db));
+  app.use("/", medicineRoutes(db));
+  app.use("/", cartRoutes(db));
   app.get("/", (req, res) => {
     res.send("LifeMeds Server Running");
   });

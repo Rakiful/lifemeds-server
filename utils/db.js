@@ -6,7 +6,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
-    strict: true,
+    strict: false,
     deprecationErrors: true,
   },
 });
@@ -21,6 +21,8 @@ async function connectToDB() {
   }
   return {
     userCollections: client.db("LifeMeds").collection("user"),
+    medicineCollections: client.db("LifeMeds").collection("medicine"),
+    cartCollections: client.db("LifeMeds").collection("cart"),
   };
 }
 
