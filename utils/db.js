@@ -24,6 +24,8 @@ async function connectToDB() {
     medicineCollections: client.db("LifeMeds").collection("medicine"),
     cartCollections: client.db("LifeMeds").collection("cart"),
     ordersCollections: client.db("LifeMeds").collection("order"),
+    sellerPaymentCollections: client.db("LifeMeds").collection("sellerPaymentHistory"),
+    shopPaymentCollections: client.db("LifeMeds").collection("shopInfo"),
   };
 }
 

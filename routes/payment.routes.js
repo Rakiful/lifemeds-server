@@ -4,6 +4,8 @@ const {
   createPaymentIntent,
   placeOrder,
   getOrders,
+  getSellerPaymentHistory,
+  updatePaymentStatus,
 } = require("../controllers/payment.controller");
 
 const { verifyFirebaseToken } = require("../middlewares/auth.middlewares");
@@ -21,7 +23,9 @@ module.exports = (db) => {
   router.post("/create-payment-intent", createPaymentIntent);
 
   router.get("/orders", getOrders);
+  router.get("/seller/payments/:email", getSellerPaymentHistory);
   router.post("/orders", placeOrder);
+  router.patch("/orders/:id/payment",updatePaymentStatus);
 
   return router;
 };
