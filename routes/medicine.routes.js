@@ -10,7 +10,7 @@ const {
 const {
   getMedicines,
   addMedicine,
-  getCategories,
+  // getCategories,
   getCompanies,
 } = require("../controllers/medicine.controller");
 
@@ -27,7 +27,7 @@ module.exports = (db) => {
   router.post("/medicines", verifyFirebaseToken, addMedicine);
 
   // Get distinct categories from medicineCollections
-  router.get("/categories", getCategories);
+  // router.get("/categories", getCategories);
 
   // Get distinct companies from medicineCollections
   router.get("/companies", getCompanies);

@@ -29,6 +29,21 @@ const getOrders = async (req, res) => {
   }
 };
 
+const getUserOrders = async (req, res) => {
+  try {
+    const email = req.params.email;
+    if (!email) {
+      return res.status(400).send({ message: "Email query is required." });
+    }
+    const orders = await req.db.ordersCollections.find({buyerEmail:email}).toArray();
+    res.send(orders);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
+  }
+};
+
 const placeOrder = async (req, res) => {
   try {
     const orderData = req.body;
@@ -127,6 +142,7 @@ module.exports = {
   createPaymentIntent,
   placeOrder,
   getOrders,
+  getUserOrders,
   getSellerPaymentHistory,
   updatePaymentStatus,
 };
