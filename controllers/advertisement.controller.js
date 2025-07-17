@@ -1,8 +1,26 @@
 const { ObjectId } = require("mongodb");
 
+const getBannerSlider = async (req, res) => {
+  try {
+    const ads = await req.db.advertisements.find({showInSlider: true}).toArray();
+    res.send(ads);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch advertisements" });
+  }
+};
+
+const getAllSellerAdvertisements = async (req, res) => {
+  try {
+    const ads = await req.db.advertisements.find().toArray();
+    res.send(ads);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch advertisements" });
+  }
+};
+
 // GET /advertisements?sellerEmail=
 const getSellerAdvertisements = async (req, res) => {
-  const sellerEmail  = req.params.email;
+  const sellerEmail = req.params.email;
 
   if (!sellerEmail) {
     return res.status(400).json({ error: "sellerEmail is required" });
@@ -22,15 +40,11 @@ const getSellerAdvertisements = async (req, res) => {
 
 // POST /advertisements
 const requestAdvertisement = async (req, res) => {
-  const { medicineImage, description, sellerEmail } = req.body;
-
-  console.log(req.body)
-
-  if (!medicineImage || !description || !sellerEmail) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
+  const { medicineName, medicineImage, description, sellerEmail } = req.body;
 
   const adData = {
+    medicineName,
+    showInSlider: false,
     medicineImage,
     description,
     sellerEmail,
@@ -78,11 +92,12 @@ const updateAdvertisementStatus = async (req, res) => {
 
 // DELETE /advertisements/:id
 const cancelAdvertisementRequest = async (req, res) => {
-  const { ObjectId } = require("mongodb");
   const id = req.params.id;
 
   try {
-    const result = await req.db.advertisements.deleteOne({ _id: new ObjectId(id) });
+    const result = await req.db.advertisements.deleteOne({
+      _id: new ObjectId(id),
+    });
     if (result.deletedCount > 0) {
       res.json({ success: true });
     } else {
@@ -93,9 +108,38 @@ const cancelAdvertisementRequest = async (req, res) => {
   }
 };
 
+
+const updateSliderStatus = async (req, res) => {
+  const id = req.params.id;
+  const { showInSlider } = req.body;
+
+  const updateDoc = { showInSlider: showInSlider }  
+  
+  if(showInSlider){
+    updateDoc.status = "approved"
+  }
+
+  if(!showInSlider){
+    updateDoc.status = "pending"
+  }
+
+  try {
+    const result = await req.db.advertisements.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateDoc }
+    );
+    res.json({ success: result.modifiedCount > 0 });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update slider status" });
+  }
+};
+
 module.exports = {
+  getBannerSlider,
+  getAllSellerAdvertisements,
   getSellerAdvertisements,
   requestAdvertisement,
   updateAdvertisementStatus,
-    cancelAdvertisementRequest,
+  cancelAdvertisementRequest,
+  updateSliderStatus ,
 };
