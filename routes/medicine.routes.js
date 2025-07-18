@@ -11,6 +11,7 @@ const {
   getMedicines,
   addMedicine,
   getMedicinesBySeller,
+  getMedicinesByCategory,
   getCompanies,
 } = require("../controllers/medicine.controller");
 
@@ -24,6 +25,7 @@ module.exports = (db) => {
   });
 
   router.get("/medicines", getMedicines);
+  router.get("/medicines/:categoryName", getMedicinesByCategory);
   router.get("/medicines/:email", getMedicinesBySeller);
   router.post("/medicines", verifyFirebaseToken, addMedicine);
 
