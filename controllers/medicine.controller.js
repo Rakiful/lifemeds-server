@@ -33,7 +33,7 @@ const getMedicinesBySeller = async (req, res) => {
     }
 
     const medicines = await req.db.medicineCollections
-      .find({ sellerEmail })
+      .find({ sellerEmail: sellerEmail })
       .toArray();
 
     res.send(medicines);
@@ -47,6 +47,13 @@ const getMedicinesBySeller = async (req, res) => {
 const addMedicine = async (req, res) => {
   try {
     const newitem = req.body;
+    const { category } = req.body;
+
+    const categoryMedicineCount = await req.db.categoryCollections.updateOne(
+      { categoryName: category },
+      { $inc: { medicineCount: 1 } }
+    );
+
     const result = await req.db.medicineCollections.insertOne(newitem);
     res.send(result);
   } catch (error) {
@@ -56,22 +63,54 @@ const addMedicine = async (req, res) => {
   }
 };
 
-// Get distinct categories from medicineCollections
-const getCategories = async (req, res) => {
+const updateMedicine = async (req, res) => {
+  const id = req.params.id;
+  const updatedMedicine = req.body;
+
+  if (updatedMedicine._id) {
+    delete updatedMedicine._id;
+  }
+
   try {
-    const categories = await req.db.medicineCollections.distinct("category");
-    res.send(categories);
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: "Failed to fetch categories", error: error.message });
+    const result = await req.db.medicineCollections.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: updatedMedicine,
+      }
+    );
+    res.send(result);
+  } catch (err) {
+    console.error("Error in updateMedicine:", err);
+    res.status(500).json({ error: "Failed to update medicine." });
+  }
+};
+
+const deleteMedicine = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const result = await req.db.medicineCollections.deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    if (result.deletedCount > 0) {
+      res.json({ deletedCount: result.deletedCount });
+    } else {
+      res.status(404).json({ error: "Medicine not found." });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete medicine." });
   }
 };
 
 // Get distinct companies from medicineCollections
 const getCompanies = async (req, res) => {
   try {
-    const companies = await req.db.medicineCollections.distinct("company");
+    const companies = [
+      "Beximco Pharma",
+      "Square Pharmaceuticals",
+      "ACI Limited",
+    ];
     res.send(companies);
   } catch (error) {
     res
@@ -85,6 +124,7 @@ module.exports = {
   getMedicinesByCategory,
   getMedicines,
   addMedicine,
-  getCategories,
+  updateMedicine,
+  deleteMedicine,
   getCompanies,
 };

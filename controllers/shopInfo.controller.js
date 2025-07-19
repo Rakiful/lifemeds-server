@@ -22,8 +22,8 @@ const getSalesReport = async (req, res) => {
         const med = medicineMap[item.medicineId];
         if (med) {
           report.push({
-            medicineName: med.name,
-            medicineImage: med.image,
+            medicineName: med.medicineName,
+            medicineImage: med.medicineImage,
             sellerEmail: med.sellerEmail,
             buyerEmail,paymentStatus,
             quantity: item.quantity,

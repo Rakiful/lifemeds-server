@@ -22,7 +22,7 @@ const addCategory = async (req, res) => {
   }
 
   const newCategory = {
-    categoryName ,
+    categoryName,
     categoryImage,
     medicineCount: 0,
     createdAt: new Date(),

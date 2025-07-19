@@ -8,7 +8,9 @@ const {
 } = require("../middlewares/auth.middlewares");
 
 const {
-getAdminDashboardStats
+  getAdminDashboardStats,
+  getSellerDashboardStats,
+  getUserDashboardStats,
 } = require("../controllers/dashboard.controller");
 
 module.exports = (db) => {
@@ -21,7 +23,8 @@ module.exports = (db) => {
   });
 
   router.get("/dashboard/admin", getAdminDashboardStats);
-
+  router.get("/dashboard/seller/:email", getSellerDashboardStats);
+  router.get("/dashboard/user/:email", getUserDashboardStats);
 
   return router;
 };

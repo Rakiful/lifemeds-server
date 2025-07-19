@@ -10,6 +10,8 @@ const {
 const {
   getMedicines,
   addMedicine,
+  updateMedicine,
+  deleteMedicine,
   getMedicinesBySeller,
   getMedicinesByCategory,
   getCompanies,
@@ -26,8 +28,10 @@ module.exports = (db) => {
 
   router.get("/medicines", getMedicines);
   router.get("/medicines/:categoryName", getMedicinesByCategory);
-  router.get("/medicines/:email", getMedicinesBySeller);
+  router.get("/medicines/seller/:email", getMedicinesBySeller);
   router.post("/medicines", verifyFirebaseToken, addMedicine);
+  router.put("/medicines/:id", verifyFirebaseToken, updateMedicine);
+  router.delete("/medicines/:id", verifyFirebaseToken, deleteMedicine);
 
   // Get distinct companies from medicineCollections
   router.get("/companies", getCompanies);

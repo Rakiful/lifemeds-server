@@ -43,14 +43,6 @@ const updateCartItem = async (req, res) => {
     const id = req.params.id;
     const { operation } = req.body;
 
-    console.log("ID from params:", id);
-    console.log("Converted ObjectId:", new ObjectId(id));
-
-    const found = await req.db.cartCollections.findOne({
-      _id: new ObjectId(id),
-    });
-    console.log("Matched Document:", found);
-
     if (!ObjectId.isValid(id)) {
       return res.status(400).send({ message: "Invalid cart item ID." });
     }
