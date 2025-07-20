@@ -2,12 +2,14 @@
 const express = require("express");
 
 const {
-  verifyFirebaseToken,
+  verifyToken,
   verifyTokenEmail,
   verifyAdmin,
+  verifySeller,
 } = require("../middlewares/auth.middlewares");
 
 const {
+  getSalesReport,
   getAdminDashboardStats,
   getSellerDashboardStats,
   getUserDashboardStats,
@@ -21,10 +23,28 @@ module.exports = (db) => {
     req.db = db;
     next();
   });
-
-  router.get("/dashboard/admin", getAdminDashboardStats);
-  router.get("/dashboard/seller/:email", getSellerDashboardStats);
-  router.get("/dashboard/user/:email", getUserDashboardStats);
+  router.get(
+    "/api/sales-report",
+    verifyToken,
+    getSalesReport
+  );
+  router.get(
+    "/dashboard/admin",
+    verifyToken,
+    verifyAdmin,
+    getAdminDashboardStats
+  );
+  router.get(
+    "/dashboard/seller/:email",
+    verifyToken,
+    verifySeller,
+    getSellerDashboardStats
+  );
+  router.get(
+    "/dashboard/user/:email",
+    verifyToken,
+    getUserDashboardStats
+  );
 
   return router;
 };

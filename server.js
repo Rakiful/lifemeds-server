@@ -2,15 +2,16 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const cookieParser = require('cookie-parser');
 const { connectToDB } = require("./utils/db");
-const { initializeFirebase } = require("./utils/firebase");
+// const { initializeFirebase } = require("./utils/firebase");
 const userRoutes = require("./routes/user.routes");
 const medicineRoutes = require("./routes/medicine.routes");
 const cartRoutes = require("./routes/cart.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const categoryRoutes = require("./routes/category.routes");
 const advertisementRoutes = require("./routes/advertisement.routes");
-const shopInfoRoutes = require("./routes/shopInfo.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
@@ -23,8 +24,9 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
-initializeFirebase();
+// initializeFirebase();
 
 connectToDB().then((db) => {
   app.use("/", userRoutes(db));
@@ -33,8 +35,23 @@ connectToDB().then((db) => {
   app.use("/", paymentRoutes(db));
   app.use("/", categoryRoutes(db));
   app.use("/", advertisementRoutes(db));
-  app.use("/", shopInfoRoutes(db));
   app.use("/", dashboardRoutes(db));
+
+  app.post("/jwt", async (req, res) => {
+    const { email } = req.body;
+    const user = { email };
+
+    const token = jwt.sign(user, process.env.JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    res.cookie('token',token,{
+      httpOnly : true,
+      secure : false,
+    })
+
+    res.send({ token });
+  });
 
   app.get("/", (req, res) => {
     res.send("LifeMeds Server Running");

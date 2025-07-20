@@ -1,19 +1,19 @@
 // middlewares/auth.middleware.js
-const { admin } = require("../utils/firebase");
+const jwt = require("jsonwebtoken");
 
-const verifyFirebaseToken = async (req, res, next) => {
-  const authHeader = req.headers?.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+const verifyToken = async (req, res, next) => {
+  const token = req?.cookies?.token;
+  if (!token) {
     return res.status(401).send({ message: "unauthorized access" });
   }
-  const token = authHeader.split(" ")[1];
-  try {
-    const userInfo = await admin.auth().verifyIdToken(token);
-    req.decoded = { email: userInfo.email };
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (error, decoded) => {
+    if (error) {
+      return res.status(401).send({ message: "unauthorized access" });
+    }
+    req.decoded = decoded;
     next();
-  } catch (err) {
-    return res.status(403).send({ message: "invalid token" });
-  }
+  });
 };
 
 const verifyTokenEmail = (req, res, next) => {
@@ -33,8 +33,19 @@ const verifyAdmin = async (req, res, next) => {
   next();
 };
 
+const verifySeller = async (req, res, next) => {
+  const email = req.decoded?.email;
+
+  const user = await req.db.userCollections.findOne({ email });
+  if (!user || user.role !== "seller") {
+    return res.status(403).send({ message: "seller access only" });
+  }
+  next();
+};
+
 module.exports = {
-  verifyFirebaseToken,
+  verifyToken,
   verifyTokenEmail,
   verifyAdmin,
+  verifySeller
 };

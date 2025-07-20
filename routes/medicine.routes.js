@@ -2,9 +2,10 @@
 const express = require("express");
 
 const {
-  verifyFirebaseToken,
+  verifyToken,
   verifyTokenEmail,
   verifyAdmin,
+  verifySeller,
 } = require("../middlewares/auth.middlewares");
 
 const {
@@ -28,13 +29,38 @@ module.exports = (db) => {
 
   router.get("/medicines", getMedicines);
   router.get("/medicines/:categoryName", getMedicinesByCategory);
-  router.get("/medicines/seller/:email", getMedicinesBySeller);
-  router.post("/medicines", verifyFirebaseToken, addMedicine);
-  router.put("/medicines/:id", verifyFirebaseToken, updateMedicine);
-  router.delete("/medicines/:id", verifyFirebaseToken, deleteMedicine);
+  router.get(
+    "/medicines/seller/:email",
+    verifyToken,
+    verifySeller,
+    getMedicinesBySeller
+  );
+  router.post(
+    "/medicines",
+    verifyToken,
+    verifySeller,
+    addMedicine
+  );
+  router.put(
+    "/medicines/:id",
+    verifyToken,
+    verifySeller,
+    updateMedicine
+  );
+  router.delete(
+    "/medicines/:id",
+    verifyToken,
+    verifySeller,
+    deleteMedicine
+  );
 
   // Get distinct companies from medicineCollections
-  router.get("/companies", getCompanies);
+  router.get(
+    "/companies",
+    verifyToken,
+    verifySeller,
+    getCompanies
+  );
 
   return router;
 };

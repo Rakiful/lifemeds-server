@@ -9,7 +9,12 @@ const {
   updatePaymentStatus,
 } = require("../controllers/payment.controller");
 
-const { verifyFirebaseToken } = require("../middlewares/auth.middlewares");
+const {
+  verifyToken,
+  verifyTokenEmail,
+  verifyAdmin,
+  verifySeller,
+} = require("../middlewares/auth.middlewares");
 
 module.exports = (db) => {
   const router = express.Router();
@@ -23,11 +28,25 @@ module.exports = (db) => {
   // Create Stripe payment intent
   router.post("/create-payment-intent", createPaymentIntent);
 
-  router.get("/orders", getOrders);
-  router.get("/user/payments/:email", getUserOrders);
-  router.get("/seller/payments/:email", getSellerPaymentHistory);
-  router.post("/orders", placeOrder);
-  router.patch("/orders/:id/payment",updatePaymentStatus);
+  router.get("/orders", verifyToken,  verifyAdmin, getOrders);
+  router.get(
+    "/user/payments/:email",
+    verifyToken,
+    getUserOrders
+  );
+  router.get(
+    "/seller/payments/:email",
+    verifyToken,
+    verifySeller,
+    getSellerPaymentHistory
+  );
+  router.post("/orders", verifyToken, placeOrder);
+  router.patch(
+    "/orders/:id/payment",
+    verifyToken,
+    verifyAdmin,
+    updatePaymentStatus
+  );
 
   return router;
 };

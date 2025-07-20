@@ -1,9 +1,9 @@
 const express = require("express");
 
 const {
-  verifyFirebaseToken,
   verifyTokenEmail,
   verifyAdmin,
+  verifyToken,
 } = require("../middlewares/auth.middlewares");
 
 const {
@@ -23,18 +23,23 @@ module.exports = (db) => {
   });
 
   router.get("/categories", getAllCategories);
-  router.post("/categories", verifyFirebaseToken, verifyAdmin, addCategory);
-  router.delete(
-    "/categories/:id",
-    verifyFirebaseToken,
+  router.post(
+    "/categories",
+    verifyToken,
     verifyAdmin,
-    deleteCategory
+    addCategory
   );
   router.put(
     "/categories/:id",
-    verifyFirebaseToken,
+    verifyToken,
     verifyAdmin,
     updateCategory
+  );
+  router.delete(
+    "/categories/:id",
+    verifyToken,
+    verifyAdmin,
+    deleteCategory
   );
 
   return router;

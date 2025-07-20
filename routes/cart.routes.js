@@ -2,9 +2,8 @@
 const express = require("express");
 
 const {
-  verifyFirebaseToken,
+  verifyToken,
   verifyTokenEmail,
-  verifyAdmin,
 } = require("../middlewares/auth.middlewares");
 
 const {
@@ -24,11 +23,14 @@ module.exports = (db) => {
     next();
   });
 
-  router.get("/cart/:email", getCartItem);
-  router.patch("/cart/:id", updateCartItem);
-  router.post("/cart", verifyFirebaseToken, addCartItem);
-  router.delete("/cart/clear/:email", clearCart);
-  router.get("/cart/count/:email", getCartItemCount);
+  router.get("/cart/:email", verifyToken, getCartItem);
+  router.get(
+    "/cart/count/:email",
+    getCartItemCount
+  );
+  router.post("/cart", verifyToken,  addCartItem);
+  router.patch("/cart/:id", verifyToken,  updateCartItem);
+  router.delete("/cart/clear/:email", verifyToken, clearCart);
 
   return router;
 };

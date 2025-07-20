@@ -20,7 +20,7 @@ const getUserRole = async (req, res) => {
     }
     const user = await req.db.userCollections.findOne({ email });
     res.send({ role: user?.role || "user" });
-  } catch {
+  } catch (error) {
     res
       .status(500)
       .send({ message: "Internal Server Error", error: error.message });

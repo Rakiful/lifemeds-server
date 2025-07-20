@@ -2,16 +2,16 @@
 const express = require("express");
 
 const {
-  verifyFirebaseToken,
   verifyTokenEmail,
   verifyAdmin,
+  verifyToken,
 } = require("../middlewares/auth.middlewares");
 
 const {
   getUsers,
   addOrUpdateUser,
   getUserRole,
-  updateUserRole
+  updateUserRole,
 } = require("../controllers/user.controller");
 
 module.exports = (db) => {
@@ -23,10 +23,15 @@ module.exports = (db) => {
     next();
   });
 
-  router.get("/users",  getUsers);
+  router.get("/users", verifyToken, verifyAdmin, getUsers);
+  router.get("/users/:email/role",verifyToken, getUserRole);
   router.post("/users", addOrUpdateUser);
-  router.get("/users/:email/role", verifyFirebaseToken, getUserRole);
-  router.patch("/users/role/:id", verifyFirebaseToken,verifyAdmin, updateUserRole);
+  router.patch(
+    "/users/role/:id",
+    verifyToken,
+    verifyAdmin,
+    updateUserRole
+  );
 
   return router;
 };
