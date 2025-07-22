@@ -3,7 +3,6 @@ const express = require("express");
 
 const {
   verifyToken,
-  verifyTokenEmail,
 } = require("../middlewares/auth.middlewares");
 
 const {

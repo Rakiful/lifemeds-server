@@ -3,14 +3,13 @@ const express = require("express");
 
 const {
   verifyToken,
-  verifyTokenEmail,
-  verifyAdmin,
   verifySeller,
 } = require("../middlewares/auth.middlewares");
 
 const {
   getMedicines,
   addMedicine,
+  getDiscountedMedicines,
   updateMedicine,
   deleteMedicine,
   getMedicinesBySeller,
@@ -29,6 +28,7 @@ module.exports = (db) => {
 
   router.get("/medicines", getMedicines);
   router.get("/medicines/:categoryName", getMedicinesByCategory);
+  router.get("/discounted/medicines", getDiscountedMedicines);
   router.get(
     "/medicines/seller/:email",
     verifyToken,

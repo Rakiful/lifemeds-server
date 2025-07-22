@@ -15,9 +15,6 @@ const getUsers = async (req, res) => {
 const getUserRole = async (req, res) => {
   try {
     const email = req.params.email;
-    if (req.decoded.email !== email) {
-      return res.status(403).send({ message: "Forbidden" });
-    }
     const user = await req.db.userCollections.findOne({ email });
     res.send({ role: user?.role || "user" });
   } catch (error) {

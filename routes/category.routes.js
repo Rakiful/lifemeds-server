@@ -1,7 +1,6 @@
 const express = require("express");
 
 const {
-  verifyTokenEmail,
   verifyAdmin,
   verifyToken,
 } = require("../middlewares/auth.middlewares");

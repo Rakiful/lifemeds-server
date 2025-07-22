@@ -2,7 +2,6 @@
 const express = require("express");
 
 const {
-  verifyTokenEmail,
   verifyAdmin,
   verifyToken,
 } = require("../middlewares/auth.middlewares");
@@ -24,7 +23,7 @@ module.exports = (db) => {
   });
 
   router.get("/users", verifyToken, verifyAdmin, getUsers);
-  router.get("/users/:email/role",verifyToken, getUserRole);
+  router.get("/users/:email/role", getUserRole);
   router.post("/users", addOrUpdateUser);
   router.patch(
     "/users/role/:id",

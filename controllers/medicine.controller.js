@@ -24,6 +24,19 @@ const getMedicinesByCategory = async (req, res) => {
       .send({ message: "Internal Server Error", error: error.message });
   }
 };
+const getDiscountedMedicines = async (req, res) => {
+  try {
+    const medicines = await req.db.medicineCollections
+      .find({ discount: { $gt: 0 } })
+      .sort({ discount: -1 })
+      .toArray();
+    res.send(medicines);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
+  }
+};
 const getMedicinesBySeller = async (req, res) => {
   try {
     const sellerEmail = req.params.email;
@@ -110,6 +123,12 @@ const getCompanies = async (req, res) => {
       "Beximco Pharma",
       "Square Pharmaceuticals",
       "ACI Limited",
+      "Eskayef",
+      "Incepta Pharma",
+      "Renata Ltd",
+      "Acme Laboratories",
+      "Aristopharma",
+      "Opsonin Pharma",
     ];
     res.send(companies);
   } catch (error) {
@@ -121,6 +140,7 @@ const getCompanies = async (req, res) => {
 
 module.exports = {
   getMedicinesBySeller,
+  getDiscountedMedicines,
   getMedicinesByCategory,
   getMedicines,
   addMedicine,

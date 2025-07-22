@@ -16,13 +16,6 @@ const verifyToken = async (req, res, next) => {
   });
 };
 
-const verifyTokenEmail = (req, res, next) => {
-  if (req.query.email !== req.decoded.email) {
-    return res.status(403).send({ message: "forbidden access" });
-  }
-  next();
-};
-
 const verifyAdmin = async (req, res, next) => {
   const email = req.decoded?.email;
 
@@ -45,7 +38,6 @@ const verifySeller = async (req, res, next) => {
 
 module.exports = {
   verifyToken,
-  verifyTokenEmail,
   verifyAdmin,
   verifySeller
 };

@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const { connectToDB } = require("./utils/db");
 // const { initializeFirebase } = require("./utils/firebase");
 const userRoutes = require("./routes/user.routes");
@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://rakif.netlify.app"],
+    origin: ["http://localhost:5173", "https://lifemeds-pharma.netlify.app"],
     credentials: true,
   })
 );
@@ -45,10 +45,11 @@ connectToDB().then((db) => {
       expiresIn: "7d",
     });
 
-    res.cookie('token',token,{
-      httpOnly : true,
-      secure : false,
-    })
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none", 
+    });
 
     res.send({ token });
   });
@@ -58,7 +59,7 @@ connectToDB().then((db) => {
   });
 
   app.listen(port, () => {
-    console.log(`server running on port ${port}`);
-    console.log(`Server running on http://localhost:${port}`);
+    // console.log(`server running on port ${port}`);
+    // console.log(`Server running on http://localhost:${port}`);
   });
 });

@@ -12,13 +12,13 @@ const client = new MongoClient(uri, {
 });
 
 async function connectToDB() {
-  await client.connect();
-  const connected = await client.db("MyPortfolio").command({ ping: 1 });
-  if (connected) {
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  }
+  // await client.connect();
+  // const connected = await client.db("MyPortfolio").command({ ping: 1 });
+  // if (connected) {
+  //   console.log(
+  //     "Pinged your deployment. You successfully connected to MongoDB!"
+  //   );
+  // }
   return {
     userCollections: client.db("LifeMeds").collection("user"),
     medicineCollections: client.db("LifeMeds").collection("medicine"),

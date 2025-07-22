@@ -81,7 +81,7 @@ const updateCartItem = async (req, res) => {
 const clearCart = async (req, res) => {
   try {
     const email = req.params.email;
-    await db.cartCollections.deleteMany({ userEmail: email });
+    await req.db.cartCollections.deleteMany({ userEmail: email });
     res.send({ message: "Cart cleared" });
   } catch (error) {
     res.status(500).send({

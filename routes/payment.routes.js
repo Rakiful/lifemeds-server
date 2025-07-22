@@ -11,7 +11,6 @@ const {
 
 const {
   verifyToken,
-  verifyTokenEmail,
   verifyAdmin,
   verifySeller,
 } = require("../middlewares/auth.middlewares");
