@@ -27,6 +27,7 @@ async function connectToDB() {
     sellerPaymentCollections: client.db("LifeMeds").collection("sellerPaymentHistory"),
     categoryCollections: client.db("LifeMeds").collection("categories"),
     advertisements: client.db("LifeMeds").collection("advertisements"),
+    subscriberCollections: client.db("LifeMeds").collection("subscriber"),
   };
 }
 

@@ -13,6 +13,7 @@ const paymentRoutes = require("./routes/payment.routes");
 const categoryRoutes = require("./routes/category.routes");
 const advertisementRoutes = require("./routes/advertisement.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const subscriberRoutes = require("./routes/subscriber.routes");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -36,6 +37,7 @@ connectToDB().then((db) => {
   app.use("/", categoryRoutes(db));
   app.use("/", advertisementRoutes(db));
   app.use("/", dashboardRoutes(db));
+  app.use("/", subscriberRoutes(db));
 
   app.post("/jwt", async (req, res) => {
     const { email } = req.body;
