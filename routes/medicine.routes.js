@@ -10,6 +10,7 @@ const {
   getMedicines,
   addMedicine,
   getDiscountedMedicines,
+  getRecentMedicines,
   updateMedicine,
   deleteMedicine,
   getMedicinesBySeller,
@@ -29,6 +30,7 @@ module.exports = (db) => {
   router.get("/medicines", getMedicines);
   router.get("/medicines/:categoryName", getMedicinesByCategory);
   router.get("/discounted/medicines", getDiscountedMedicines);
+  router.get("/recent/medicines", getRecentMedicines);
   router.get(
     "/medicines/seller/:email",
     verifyToken,

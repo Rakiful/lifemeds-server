@@ -37,6 +37,20 @@ const getDiscountedMedicines = async (req, res) => {
       .send({ message: "Internal Server Error", error: error.message });
   }
 };
+const getRecentMedicines = async (req, res) => {
+  try {
+    const medicines = await req.db.medicineCollections
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .toArray();
+    res.send(medicines);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
+  }
+};
 const getMedicinesBySeller = async (req, res) => {
   try {
     const sellerEmail = req.params.email;
@@ -141,6 +155,7 @@ const getCompanies = async (req, res) => {
 module.exports = {
   getMedicinesBySeller,
   getDiscountedMedicines,
+  getRecentMedicines,
   getMedicinesByCategory,
   getMedicines,
   addMedicine,
